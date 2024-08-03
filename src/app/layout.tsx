@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Toast from "@/(Providers)/Toast";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,12 +13,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  uploadModal,
 }: Readonly<{
   children: React.ReactNode;
+  uploadModal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Toast>
+          <Navbar />
+          {children}
+          {uploadModal}
+        </Toast>
+      </body>
     </html>
   );
 }
