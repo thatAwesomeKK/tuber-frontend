@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 const isServer = typeof window === "undefined";
 
 let host_url;
@@ -73,6 +73,17 @@ export const deleteVideo = async (videoId: string) => {
     credentials: "include",
   }).then((res) => res.json());
   console.log(payload);
-  
+
   return payload.message;
+};
+
+export const getVideoMetadata = async (videoId: string) => {
+  const payload = await fetch(`${base_url}/stream-metadata?fileid=${videoId}`, {
+    cache: "no-store",
+  }).then((res) => res.json());
+  return payload;
+};
+
+export const getStreamUrl = (videoId: string) => {
+  return `${base_url}/stream/${videoId}`;
 };
