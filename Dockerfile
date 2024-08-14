@@ -3,8 +3,8 @@ WORKDIR /my-space
 
 RUN npm install -g pnpm
 
-ENV NEXT_PUBLIC_CALLBACK_URL=https://tuber.thatawesomekk.eu.org
-ENV NEXT_PUBLIC_CLIENT_URL=https://metadata.thatawesomekk.eu.org
+ENV NEXT_PUBLIC_CALLBACK_URL=https://metadata.thatawesomekk.eu.org
+ENV NEXT_PUBLIC_CLIENT_URL=https://tuber.thatawesomekk.eu.org
 
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm i --frozen-lockfile

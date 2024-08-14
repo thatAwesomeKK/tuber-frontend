@@ -1,13 +1,9 @@
-'use client'
-import React from 'react'
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+"use client";
+import { Toaster } from "@/components/ui/sonner";
+import React from "react";
 
-function Toast({ children }: { children: React.ReactNode }) {
-    return <>
-        <ToastContainer />
-        {children}
-    </>
+function Toast() {
+  return <Toaster expand={true} richColors position="top-right" />;
 }
 
-export default Toast
+export default Toast;

@@ -4,6 +4,8 @@ import { fetchVideoMetadata } from "@/lib/apiCalls/video";
 import { cookies } from "next/headers";
 import React from "react";
 
+export const dynamic = "force-dynamic";
+
 const Upload = async ({
   searchParams,
 }: {
@@ -16,11 +18,9 @@ const Upload = async ({
 
   if (videoPayload.success === true) {
     return (
-      <main className="flex flex-col justify-center items-center h-[93vh] space-y-3">
+      <main className="flex flex-col justify-center items-center space-y-3">
         <h1 className="font-bold text-6xl mb-4">Add Details</h1>
-        <div>
-          <UploadForm video={videoPayload.video} />
-        </div>
+        <UploadForm video={videoPayload.video} />
       </main>
     );
   }
@@ -32,7 +32,7 @@ const Upload = async ({
         <div className="mb-3">
           <Dropzone className="border border-dashed py-6 flex justify-center items-center rounded-2xl" />
         </div>
-        <UploadForm video={videoPayload.video} />
+        {/* <UploadForm video={videoPayload.video} /> */}
       </div>
     </main>
   );

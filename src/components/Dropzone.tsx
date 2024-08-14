@@ -1,29 +1,67 @@
 "use client";
 import { ArrowUpToLine, Loader2 } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Progress } from "./ui/progress";
 import { uploadVideo } from "@/lib/apiCalls/video";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { socket } from "@/lib/socket";
 
 export default function Dropzone({ className }: { className: string }) {
   const [loading, setLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const router = useRouter();
 
   const onDrop = useCallback(async (acceptedFiles: any) => {
     setLoading(true);
-    const fd = new FormData();
-    fd.append("video", acceptedFiles[0]);
-    const payload = await uploadVideo(fd, setUploadProgress);
+    const payload = await uploadVideo(acceptedFiles[0], setUploadProgress);
+
     setLoading(false);
-    if (payload.success === true) setIsComplete(true);
-    window.location.href = `/upload?videoId=${payload.videoId}`;
+    if (payload.success === true) {
+      setIsComplete(true);
+      window.location.href = `/upload?videoId=${payload.videoId}`;
+    } else {
+      toast.error(payload.message);
+      router.back();
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxFiles: 1,
   });
+
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
+
+    function onConnect() {
+      socket.emit("connect-client")
+    }
+
+    function onDisconnect() {
+      console.log("Socket disconnected!");
+    }
+
+    function onConnected(payload: any) {
+      console.log(payload);
+      const uploadId = payload.uploadId;
+
+      localStorage.setItem("uploadId", uploadId);
+    }
+
+    socket.on("connected", onConnected);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
 
   return (
     <div {...getRootProps({ className })}>
@@ -52,7 +90,7 @@ export default function Dropzone({ className }: { className: string }) {
                   </>
                 ) : (
                   <>
-                    <ArrowUpToLine className="h-20 w-20 text-gray-300" />
+                    <ArrowUpToLine className="h-20 w-20" />
                     <p className="text-justify">
                       Drag 'n' drop some files here, or click to select files
                     </p>

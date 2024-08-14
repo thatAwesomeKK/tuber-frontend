@@ -11,15 +11,16 @@ import {
 import { useRouter } from "next/navigation";
 import { LogInIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
-import { SignOut } from "@thatawesomekk/single-sign-on";
+import { signOut } from "@thatawesomekk/single-sign-on";
+import { useUserStore } from "@/lib/store";
 
 interface Props {
   children: ReactNode;
-  user: String;
 }
 
-const UserDropdown = ({ children, user }: Props) => {
+const UserDropdown = ({ children }: Props) => {
   const router = useRouter();
+  const { user } = useUserStore();
   return (
     <DropdownMenu>
       {children}
@@ -36,7 +37,7 @@ const UserDropdown = ({ children, user }: Props) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {user ? (
-            <DropdownMenuItem onClick={() => SignOut()}>
+            <DropdownMenuItem onClick={() => signOut()}>
               <LogOutIcon className="h-4 w-4 mr-2" />
               SignOut
             </DropdownMenuItem>
