@@ -81,7 +81,7 @@ const CommentForm = ({
               </FormItem>
             )}
           />
-          <div className="flex justify-end items-center w-full mt-2">
+          <div className="flex justify-end items-center w-full mt-2 gap-2">
             <Button className="rounded-full" type="submit">
               {loading ? (
                 <>
@@ -90,9 +90,20 @@ const CommentForm = ({
               ) : initialValues ? (
                 "Edit Comment"
               ) : (
-                "Comment"
+                "Comment" 
               )}
             </Button>
+            {initialValues && (
+              <Button
+                className="rounded-full"
+                onClick={() =>
+                  initialValues.setOpenModal(!initialValues.openModal)
+                }
+                type="button"
+              >
+                Close
+              </Button>
+            )}
           </div>
         </form>
       </Form>

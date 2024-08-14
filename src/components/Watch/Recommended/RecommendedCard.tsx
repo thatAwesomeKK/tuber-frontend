@@ -18,7 +18,7 @@ const RecommendedCard = ({ video }: Props) => {
       <div className="flex mt-1">
         <div>
           <h3 className="font-semibold line-clamp-1">{video.title}</h3>
-          <div className="font-normal text-xs text-gray-500 mt-1">
+          <div className="font-normal text-xs text-primary dark:text-primary/50 mt-1">
             <p>{video.userId.fullName}</p>
             <p>
               {video.views} {video.views === 1 ? "view" : "views"} •{" "}

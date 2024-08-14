@@ -12,6 +12,7 @@ import { useFormStatus } from "react-dom";
 import { Comment } from "../../../../typings";
 import CommentForm from "@/components/Forms/CommentForm";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const CommentActionButtons = ({ comment }: { comment: Comment }) => {
   const [openModal, setOpenModal] = useState(false);
