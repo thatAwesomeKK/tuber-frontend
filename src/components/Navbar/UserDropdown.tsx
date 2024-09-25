@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-import { LogInIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import { ListVideo, LogInIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "@thatawesomekk/single-sign-on";
 import { useUserStore } from "@/lib/store";
@@ -28,11 +28,17 @@ const UserDropdown = ({ children }: Props) => {
         <DropdownMenuGroup>
           <DropdownMenuLabel>Your Loving Menu</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link className="flex items-center" href={"/settings"}>
+          <Link href={"/settings"}>
+            <DropdownMenuItem>
               <SettingsIcon className="h-4 w-4 mr-2" /> Settings
-            </Link>
-          </DropdownMenuItem>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/playlist">
+            <DropdownMenuItem>
+              <ListVideo className="h-4 w-4 mr-2" />
+              Playlist
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

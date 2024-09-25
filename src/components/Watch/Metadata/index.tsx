@@ -4,6 +4,9 @@ import React from "react";
 import MetadataActionButtons from "./MetadataActionButtons";
 import Timeago from "@/components/ui/CustomComponents/Timeago";
 import { Video } from "../../../../typings";
+import { ListPlus } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PageProps {
   videoId: string;
@@ -32,11 +35,13 @@ const Metadata = async ({ videoId }: PageProps) => {
             </p>
           </div>
         </div>
-        <MetadataActionButtons
-          videoId={videoId}
-          initialLikes={video.likes}
-          initialDislikes={video.dislikes}
-        />
+        <div className="flex justify-center items-center gap-2">
+          <MetadataActionButtons
+            videoId={videoId}
+            initialLikes={video.likes}
+            initialDislikes={video.dislikes}
+          />
+        </div>
       </div>
       <div className="my-3 bg-foreground/10 rounded-lg px-3 py-2">
         <div>

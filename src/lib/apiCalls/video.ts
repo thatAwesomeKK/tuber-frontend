@@ -44,10 +44,12 @@ export const uploadVideo = async (
       `${base_url}/upload-complete`,
       {
         originalname: fileName,
-        uploadId: localStorage.getItem("uploadId")
+        uploadId: localStorage.getItem("uploadId"),
       },
       { withCredentials: true }
     );
+    console.log(res.data);
+    
     return res.data;
   } catch (error) {
     console.log(error.response.data);
@@ -57,6 +59,14 @@ export const uploadVideo = async (
 
 export const fetchAllVideos = async () => {
   const payload = await fetch(`${base_url}/fetch`, {
+    method: "GET",
+    next: { revalidate: 60 },
+  }).then((res) => res.json());
+  return payload.videos;
+};
+
+export const searchVideos = async (s: string) => {
+  const payload = await fetch(`${base_url}/search?s=${s}`, {
     method: "GET",
     next: { revalidate: 60 },
   }).then((res) => res.json());
@@ -74,7 +84,7 @@ export const fetchVideoMetadata = async (
       "Content-Type": "application/json",
       Cookie: `accessToken=${accessToken}`,
     },
-    next: {tags: ["video-metadata"]},
+    next: { tags: ["video-metadata"] },
   });
   const data = await res.json();
   return data;

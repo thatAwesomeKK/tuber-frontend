@@ -1,5 +1,5 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { Card } from "../ui/card";
 import {
   Form,
   FormControl,
@@ -8,23 +8,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Card } from "../ui/card";
-import { Input } from "../ui/input";
 import * as z from "zod";
+import { Video } from "../../../typings";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { updateVideoMetadata } from "@/lib/apiCalls/server/video";
+import { toast } from "sonner";
+import Image from "next/image";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
-import { updateVideoMetadata } from "@/lib/apiCalls/server/video";
-import { Textarea } from "../ui/textarea";
-import { toast } from "sonner";
-import { Video } from "../../../typings";
-import { socket } from "@/lib/socket";
-
-interface Props {
-  video: Video;
-}
 
 const formSchema = z.object({
   title: z.string(),
@@ -32,14 +26,18 @@ const formSchema = z.object({
   tags: z.string(),
 });
 
-const UploadForm = ({ video }: Props) => {
+interface Props {
+  video: Video;
+}
+
+const UpdateForm = ({ video }: Props) => {
   const [loading, setLoading] = useState(false);
   const [thumbnail, setThumbnail] = useState<string | null>(
     video.thumbnail || null
   );
-  const [isPublished, setIsPublished] = useState<boolean>(video.isPublished);
 
   const uploadThumbnailRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -79,48 +77,6 @@ const UploadForm = ({ video }: Props) => {
     };
   };
 
-  useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-
-    function onConnect() {
-      console.log("Socket Connected!");
-      socket.emit("connect-upload-form", {
-        uploadId: localStorage.getItem("uploadId"),
-      });
-    }
-
-    function onDisconnect() {
-      console.log("Socket disconnected!");
-    }
-
-    function onThumbnailUpload(payload: any) {
-      const { thumbnail } = payload;
-      setThumbnail(thumbnail);
-    }
-
-    function onVideoProcessComplete(payload: any) {
-      console.log(payload.message);
-      setIsPublished(true);
-      socket.disconnect();
-    }
-
-    socket.on("video-thumbnail-complete", onThumbnailUpload);
-
-    socket.on("video-process-complete", onVideoProcessComplete);
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    return () => {
-      socket.off("video-process-complete", onVideoProcessComplete);
-      socket.off("video-thumbnail-complete", onThumbnailUpload);
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
-  }, []);
-
   return (
     <div className="flex">
       <Card className="flex p-10">
@@ -131,19 +87,12 @@ const UploadForm = ({ video }: Props) => {
               onClick={() => uploadThumbnailRef.current?.click()}
             >
               <div className="h-56 w-96 border-2 relative flex justify-center items-center overflow-hidden rounded-lg">
-                <div className="relative w-full h-full group">
-                  <Image
-                    className={`${
-                      isPublished ? "opacity-100" : "opacity-40"
-                    } object-cover hover:scale-105 transition duration-150 ease-in-out`}
-                    src={thumbnail || "/images/default-profile-photo.png"}
-                    alt=""
-                    fill={true}
-                  />
-                </div>
-                {!isPublished && (
-                  <Loader2 className="w-40 h-40 absolute animate-spin" />
-                )}
+                <Image
+                  className="object-cover hover:scale-105 transition duration-150 ease-in-out"
+                  src={thumbnail || "/images/default-profile-photo.png"}
+                  alt=""
+                  fill={true}
+                />
               </div>
               <input
                 ref={uploadThumbnailRef}
@@ -199,22 +148,8 @@ const UploadForm = ({ video }: Props) => {
           </form>
         </Form>
       </Card>
-      {/* <Card className="p-10">
-        <div className="relative flex justify-center items-center group flex-col">
-          <Play className="absolute w-16 h-16 text-white z-40 opacity-0 group-hover:opacity-90 transition-opacity duration-200 ease-out" />
-          <div className="relative h-56 w-96 group overflow-hidden rounded-md border-2">
-            <Image
-              className="object-cover hover:scale-105 transition duration-150 ease-in-out"
-              src={thumbnail || "/images/default-profile-photo.png"}
-              alt=""
-              fill={true}
-            />
-          </div>
-          {isPublished ? <p>Published</p> : <p>Processing....</p>}
-        </div>
-      </Card> */}
     </div>
   );
 };
 
-export default UploadForm;
+export default UpdateForm;

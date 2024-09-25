@@ -16,7 +16,7 @@ export type Video = {
 type PublicUser = {
   fullName: string;
   pfp: string;
-  uid: string
+  uid: string;
 };
 
 type User = {
@@ -33,5 +33,13 @@ export type Comment = {
   videoId: string;
   userId: PublicUser;
   comment: string;
+  createdAt: Date;
+};
+
+export type Playlist = {
+  _id: string;
+  name: string;
+  videoIds: Array<string>;
+  userId: string;
   createdAt: Date;
 };

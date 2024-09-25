@@ -21,7 +21,7 @@ export default function Dropzone({ className }: { className: string }) {
     setLoading(false);
     if (payload.success === true) {
       setIsComplete(true);
-      window.location.href = `/upload?videoId=${payload.videoId}`;
+      window.location.href = `/upload?videoId=${payload.id}`;
     } else {
       toast.error(payload.message);
       router.back();

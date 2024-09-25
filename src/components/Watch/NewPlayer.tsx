@@ -32,6 +32,9 @@ const NewPlayer = ({ videoId, id }: { videoId: string; id: string }) => {
   const [viewCount, setViewCount] = useState(true);
   const [buffered, setBuffered] = useState(0);
 
+  console.log(videoId);
+  
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

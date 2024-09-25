@@ -1,16 +1,8 @@
 "use client";
 import React from "react";
-import UploadForm from "../Forms/UploadForm";
-import { fetchVideoMetadata } from "@/lib/apiCalls/video";
-import { cookies } from "next/headers";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Video } from "../../../typings";
+import UpdateForm from "../Forms/UpdateForm";
 
 interface Props {
   video: Video;
@@ -25,7 +17,7 @@ const UpdateModal = ({ video, children }: Props) => {
         <DialogHeader>
           <DialogTitle>Update Your Video Data</DialogTitle>
         </DialogHeader>
-        <UploadForm video={video} />
+        <UpdateForm video={video} />
       </DialogContent>
     </Dialog>
   );

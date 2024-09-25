@@ -16,7 +16,7 @@ const VideoFeed = async () => {
   return (
     <main className="flex justify-center items-center my-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-[87.1%] gap-7">
-        {videos.length <= 0 ? (
+        {videos?.length <= 0 ? (
           <></>
         ) : (
           videos?.map((video, i) => (
